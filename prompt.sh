@@ -67,6 +67,7 @@ if [ -n "${BASH_VERSION}" ]; then
         local should_push=${21}
         local will_rebase=${22}
         local has_stashes=${23}
+        local last_message=${24}
 
         local prompt=""
         local original_prompt=$PS1
@@ -132,7 +133,11 @@ if [ -n "${BASH_VERSION}" ]; then
             if [[ $detached == true ]]; then
                 prompt+=$(enrich_append $detached $omg_detached_symbol "${white_on_red}")
                 prompt+=$(enrich_append $detached "(${current_commit_hash:0:7})" "${black_on_red}")
-            else            
+            else
+	 	            # <grol>
+		            prompt+=$(enrich_append true "(${current_commit_hash:0:7})" "${black_on_red}")
+		            # </grol>
+
                 if [[ $has_upstream == false ]]; then
                     prompt+=$(enrich_append true "-- ${omg_not_tracked_branch_symbol}  --  (${current_branch})" "${black_on_red}")
                 else
@@ -159,6 +164,12 @@ if [ -n "${BASH_VERSION}" ]; then
                     prompt+=$(enrich_append true "(${current_branch} ${type_of_upstream} ${upstream//\/$current_branch/})" "${black_on_red}")
                 fi
             fi
+            # <grol>
+            if [[ "$last_message" == "WIP" ]]; then
+              prompt+=$(enrich_append true "${white_on_red}WIP${black_on_red}" "${black_on_red}")
+            fi
+            # </grol>
+
             prompt+=$(enrich_append ${is_on_a_tag} "${omg_is_on_a_tag_symbol} ${tag_at_current_commit}" "${black_on_red}")
             prompt+="${omg_last_symbol_color}${reset}\n"
             prompt+="$(eval_prompt_callback_if_present)"
