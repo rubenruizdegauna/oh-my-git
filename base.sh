@@ -102,7 +102,7 @@ function build_prompt {
             if [[ $number_of_stashes -gt 0 ]]; then local has_stashes=true; fi
 
             # <grol>
-            local last_commit_message=$( git log -1 --pretty=%B | egrep . )
+            local last_commit_message=$( git log -1 --pretty=%B | grep -E . )
             # </grol>
         fi
     fi
